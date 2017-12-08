@@ -1,6 +1,7 @@
 # FriendsBookApp
 
-.Assignment
+Assignment
+
 Use data.json provided. You should then create a Web app, which provides functionality to choose a person within the group stored in the database and display the following information about this person:
 
 
