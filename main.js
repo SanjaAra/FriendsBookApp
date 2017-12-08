@@ -8,6 +8,8 @@ let xml = new XMLHttpRequest(),
   data,
   userAge,
   bestFriendsArr,
+  bFIndex,
+  bFIndexArr = [],
   dataPlace;
 
 xml.open('GET', 'https://raw.githubusercontent.com/SanjaAra/FriendsBook_data_json/master/data.json');
@@ -62,24 +64,30 @@ function createOneUser() {
 <p>My age: <span>${userAge}</span></p>
 <p>Gender: <span>${data[dataPlace].gender}</span></p>
 <p>My best friends: <span>${bestFriends()}</span></p>
-<p>Friends of my friends: <span>ASA asda  dfgsdgsg</span></p>
-<p>Suggested friends: <span>ASA asda  dfgsdgsg</span></p>
+<p>Friends of my friends: <span>${friendsFriends()}</span></p>
+<p>Suggested friends: <span>${suggestedFriends()}</span></p>
 `;
 }
 
 function bestFriends() {
-  bestFriendsArr = data[dataPlace].friends
-  console.log(bestFriendsArr);
+  bestFriendsArr = data[dataPlace].friends //data.friends[id:]
   allBestFriends = '<ol>'
   for (let i = 0; i < bestFriendsArr.length; i++) {
-    let bFI = data.findIndex(d => d.id == bestFriendsArr[i]);
-
-    allBestFriends += '<li>' + data[bFI].firstName + ' ' + data[bFI].surname + '</li>';
+    bFIndex = data.findIndex(d => d.id == bestFriendsArr[i]); //data index of bestFriends
+    bFIndexArr.push(bFIndex);
+    allBestFriends += '<li>' + data[bFIndex].firstName + ' ' + data[bFIndex].surname + '</li>';
   };
   allBestFriends += '</ol>'
   return allBestFriends
 };
 
 function friendsFriends() {
+  allFriendsFriends = 'u izradi :)'
+  console.log(bFIndexArr); // array of bestFriends index
+  return allFriendsFriends
+}
 
+function suggestedFriends() {
+  allsggFriends = 'u izradi :)'
+  return allsggFriends
 }
