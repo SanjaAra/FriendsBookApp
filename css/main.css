@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  color: #555; }
+  body .jumbotron {
+    background-color: #5598e6; }
+    body .jumbotron h1 {
+      font-weight: bold;
+      color: #fff;
+      text-shadow: -5px 5px 5px #333; }
+    body .jumbotron a {
+      color: #fff;
+      text-decoration: none; }
+  body h2 {
+    font-size: 40px;
+    margin-bottom: 30px; }
+
+.table tbody tr td {
+  line-height: 32px; }
+
+#oneUser {
+  display: none; }
+  #oneUser p span {
+    color: #5598e6; }
+  #oneUser ol {
+    color: #5598e6; }
+
+/*# sourceMappingURL=main.css.map */
