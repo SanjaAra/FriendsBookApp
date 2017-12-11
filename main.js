@@ -1,7 +1,7 @@
 let xml = new XMLHttpRequest(),
   allUsersView = document.getElementById('allUsersView'),
   oneUser = document.getElementById('oneUser'),
-  oneUserBtn = document.getElementById('oneUserBtn'),
+
   mainTbody = document.getElementsByTagName('tbody')[0],
   mainTbodyText = '',
   allBestFriends = '',
@@ -47,16 +47,10 @@ function moreInfo() {
   allUsersView.style.display = "none";
   oneUser.style.display = "block";
   createOneUser();
+
 }
 
 // second page
-
-oneUserBtn.addEventListener('click', function() {
-  allUsersView.style.display = "block";
-  oneUser.style.display = "none";
-  bFIndexArr = []; //data index of bestFriends, clear
-  uniqallfriendsFriendsIdArr = [];
-});
 
 function createOneUser() {
   let num1 = data[dataPlace].age;
@@ -72,7 +66,18 @@ function createOneUser() {
 <p>My best friends: <span>${bestFriends()}</span></p>
 <p>Friends of my friends: <span>${friendsFriends()}</span></p>
 <p>Suggested friends: <span>${suggestedFriends()}</span></p>
+<button id="oneUserBtn" class="btn btn-primary btn-lg" type="button" name="button">Return to main page</button>
 `;
+  let oneUserBtn = document.getElementById('oneUserBtn');
+
+  oneUserBtn.addEventListener('click', function() {
+    allUsersView.style.display = "block";
+    oneUser.style.display = "none";
+    bFIndexArr = []; //data index of bestFriends, clear
+    uniqallfriendsFriendsIdArr = [];
+    fFIndexArr = [];
+  });
+
 };
 
 function bestFriends() {
@@ -89,7 +94,7 @@ function bestFriends() {
 
 function friendsFriends() {
   let allFfIdString = ''; //string id-jeva prijatelja prijatelja
-  console.log(bFIndexArr); // array of bestFriends index [1, 3, 4, 6]
+  console.log("Index best Friend", bFIndexArr); // array of bestFriends index [1, 3, 4, 6]
   for (let i = 0; i < bFIndexArr.length; i++) {
     allFfIdString += data[bFIndexArr[i]].friends + ',';
   };
@@ -107,7 +112,7 @@ function friendsFriends() {
       uniqallfriendsFriendsIdArr.push(allfriendsFriendsIdArr[i]);
     };
   };
-  console.log(uniqallfriendsFriendsIdArr);
+  console.log("id-evi prijatelji prijatelja", uniqallfriendsFriendsIdArr);
 
   allfriendsFriendsTxt = '<ol>'
   for (let i = 0; i < uniqallfriendsFriendsIdArr.length; i++) {
@@ -123,6 +128,17 @@ function friendsFriends() {
 
 
 function suggestedFriends() {
+  console.log(dataPlace);
+  console.log("indexi prijatelji prijatelja", fFIndexArr);
+
+  function removeMainUser(id) {
+    return id != dataPlace;
+  }
+  let suggestedFriendsIdArr = fFIndexArr.filter(removeMainUser)
+
+  console.log('bez id-a usera - indexi prijatelji prijatelja', suggestedFriendsIdArr);
+
+
   allsggFriends = 'u izradi :)'
   return allsggFriends
 }
