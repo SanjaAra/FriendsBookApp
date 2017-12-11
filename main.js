@@ -5,11 +5,15 @@ let xml = new XMLHttpRequest(),
   mainTbody = document.getElementsByTagName('tbody')[0],
   mainTbodyText = '',
   allBestFriends = '',
+  allfriendsFriendsTxt = '',
   data,
   userAge,
   bestFriendsArr,
   bFIndex,
   bFIndexArr = [],
+  fFIndex,
+  fFIndexArr = [],
+  uniqallfriendsFriendsIdArr = [],
   dataPlace;
 
 xml.open('GET', 'https://raw.githubusercontent.com/SanjaAra/FriendsBook_data_json/master/data.json');
@@ -50,7 +54,9 @@ function moreInfo() {
 oneUserBtn.addEventListener('click', function() {
   allUsersView.style.display = "block";
   oneUser.style.display = "none";
-})
+  bFIndexArr = []; //data index of bestFriends, clear
+  uniqallfriendsFriendsIdArr = [];
+});
 
 function createOneUser() {
   let num1 = data[dataPlace].age;
@@ -67,25 +73,54 @@ function createOneUser() {
 <p>Friends of my friends: <span>${friendsFriends()}</span></p>
 <p>Suggested friends: <span>${suggestedFriends()}</span></p>
 `;
-}
+};
 
 function bestFriends() {
-  bestFriendsArr = data[dataPlace].friends //data.friends[id:]
-  allBestFriends = '<ol>'
+  bestFriendsArr = data[dataPlace].friends; //array data.friends[id:]
+  allBestFriends = '<ol>';
   for (let i = 0; i < bestFriendsArr.length; i++) {
     bFIndex = data.findIndex(d => d.id == bestFriendsArr[i]); //data index of bestFriends
     bFIndexArr.push(bFIndex);
     allBestFriends += '<li>' + data[bFIndex].firstName + ' ' + data[bFIndex].surname + '</li>';
   };
-  allBestFriends += '</ol>'
-  return allBestFriends
+  allBestFriends += '</ol>';
+  return allBestFriends;
 };
 
 function friendsFriends() {
-  allFriendsFriends = 'u izradi :)'
-  console.log(bFIndexArr); // array of bestFriends index
-  return allFriendsFriends
-}
+  let allFfIdString = ''; //string id-jeva prijatelja prijatelja
+  console.log(bFIndexArr); // array of bestFriends index [1, 3, 4, 6]
+  for (let i = 0; i < bFIndexArr.length; i++) {
+    allFfIdString += data[bFIndexArr[i]].friends + ',';
+  };
+  let allfriendsFriendsIdArr = allFfIdString.split(','); //Array id-jeva prijatelja prijatelja, za koje trebanaci index i da se ne ponavljaju
+  let emptyAfF = allfriendsFriendsIdArr.indexOf("");
+  allfriendsFriendsIdArr.splice(emptyAfF, 1); // uklanjanje praznog elementa
+
+  for (let i = 0; i < allfriendsFriendsIdArr.length; i++) { // prebacivanje u integer
+    allfriendsFriendsIdArr[i] = parseInt(allfriendsFriendsIdArr[i], 10);
+  };
+
+  // uklanjanje duplikata id-jeva prijatelja prijatelja
+  for (let i = 0; i < allfriendsFriendsIdArr.length; i++) {
+    if (uniqallfriendsFriendsIdArr.indexOf(allfriendsFriendsIdArr[i]) == -1) {
+      uniqallfriendsFriendsIdArr.push(allfriendsFriendsIdArr[i]);
+    };
+  };
+  console.log(uniqallfriendsFriendsIdArr);
+
+  allfriendsFriendsTxt = '<ol>'
+  for (let i = 0; i < uniqallfriendsFriendsIdArr.length; i++) {
+    fFIndex = data.findIndex(d => d.id == uniqallfriendsFriendsIdArr[i]); //data index of friendsFriends
+    fFIndexArr.push(fFIndex);
+    allfriendsFriendsTxt += '<li>' + data[fFIndex].firstName + ' ' + data[fFIndex].surname + '</li>';
+  };
+  allfriendsFriendsTxt += '</ol>';
+  return allfriendsFriendsTxt;
+};
+
+
+
 
 function suggestedFriends() {
   allsggFriends = 'u izradi :)'
