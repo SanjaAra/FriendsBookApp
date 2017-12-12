@@ -6,6 +6,7 @@ let xml = new XMLHttpRequest(),
   mainTbodyText = '',
   allBestFriends = '',
   allfriendsFriendsTxt = '',
+  allSuggestedFriends = '',
   data,
   userAge,
   bestFriendsArr,
@@ -13,7 +14,10 @@ let xml = new XMLHttpRequest(),
   bFIndexArr = [],
   fFIndex,
   fFIndexArr = [],
+  sFIndex,
   uniqallfriendsFriendsIdArr = [],
+  allfriendsFriendsIdArr = [],
+  allSggFriendsIdDbl = [],
   dataPlace;
 
 xml.open('GET', 'https://raw.githubusercontent.com/SanjaAra/FriendsBook_data_json/master/data.json');
@@ -98,14 +102,14 @@ function friendsFriends() {
   for (let i = 0; i < bFIndexArr.length; i++) {
     allFfIdString += data[bFIndexArr[i]].friends + ',';
   };
-  let allfriendsFriendsIdArr = allFfIdString.split(','); //Array id-jeva prijatelja prijatelja, za koje trebanaci index i da se ne ponavljaju
+  allfriendsFriendsIdArr = allFfIdString.split(','); //Array id-jeva prijatelja prijatelja, za koje trebanaci index i da se ne ponavljaju
   let emptyAfF = allfriendsFriendsIdArr.indexOf("");
   allfriendsFriendsIdArr.splice(emptyAfF, 1); // uklanjanje praznog elementa
 
   for (let i = 0; i < allfriendsFriendsIdArr.length; i++) { // prebacivanje u integer
     allfriendsFriendsIdArr[i] = parseInt(allfriendsFriendsIdArr[i], 10);
   };
-
+  // console.log('Arr id prijatelja prijatelja sa duplikatima', allfriendsFriendsIdArr);
   // uklanjanje duplikata id-jeva prijatelja prijatelja
   for (let i = 0; i < allfriendsFriendsIdArr.length; i++) {
     if (uniqallfriendsFriendsIdArr.indexOf(allfriendsFriendsIdArr[i]) == -1) {
@@ -129,16 +133,46 @@ function friendsFriends() {
 
 function suggestedFriends() {
   console.log(dataPlace);
-  console.log("indexi prijatelji prijatelja", fFIndexArr);
+  console.log(dataPlace + 1);
+  // console.log("indexi prijatelji prijatelja", fFIndexArr);
+  console.log('Arr id prijatelja prijatelja sa duplikatima', allfriendsFriendsIdArr);
 
   function removeMainUser(id) {
-    return id != dataPlace;
+    return id != dataPlace + 1;
   }
-  let suggestedFriendsIdArr = fFIndexArr.filter(removeMainUser)
+  let noUserfFIdArr = allfriendsFriendsIdArr.filter(removeMainUser) //bez id-a usera - indexi prijatelji prijatelja
+  console.log('bez id-a usera - id prijatelji prijatelja', noUserfFIdArr);
+  noUserfFIdArr.sort()
+  console.log('sorted', noUserfFIdArr);
+  for (let i = 0; i < noUserfFIdArr.length - 1; i++) {
+    if (noUserfFIdArr[i + 1] == noUserfFIdArr[i]) {
+      console.log(noUserfFIdArr[i + 1]);
+    }
+  }
 
-  console.log('bez id-a usera - indexi prijatelji prijatelja', suggestedFriendsIdArr);
+  for (let i = 0; i < noUserfFIdArr.length - 1; i++) { //brisu seonikoji nisu dupli- mora da ima bar 2 prijatelja
+    if (noUserfFIdArr[i + 1] == noUserfFIdArr[i]) {
+      allSggFriendsIdDbl.push(noUserfFIdArr[i + 1]);
+    }
+  }
+  console.log(allSggFriendsIdDbl);
 
-
-  allsggFriends = 'u izradi :)'
-  return allsggFriends
+  function unique(el) {
+    for (let i = 0; i < allSggFriendsIdDbl.length - 1; i++) { // brisu se dupli id-evi predloga prijatelja
+      if (allSggFriendsIdDbl[i + 1] == allSggFriendsIdDbl[i]) {
+        allSggFriendsIdDbl.splice(i, 1);
+      }
+    }
+    return el;
+  }
+  allSggFriendsIdDbl.filter(unique);
+  console.log(allSggFriendsIdDbl);
+  allSuggestedFriends = `<ol>`
+  for (let i = 0; i < allSggFriendsIdDbl.length; i++) {
+    sFIndex = data.findIndex(el => el.id == allSggFriendsIdDbl[i])
+    console.log(sFIndex);
+    allSuggestedFriends += '<li>' + data[sFIndex].firstName + ' ' + data[sFIndex].surname + '</li>';
+  }
+  allSuggestedFriends += `</ol>`
+  return allSuggestedFriends
 }
